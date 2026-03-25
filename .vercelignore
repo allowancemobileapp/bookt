@@ -1,0 +1,14 @@
+node_modules
+.git
+.dart_tool
+build/*
+!build/web/
+dist
+.next
+.cache
+android
+ios
+*.log
+*.zip
+*.mp4
+*.apk
