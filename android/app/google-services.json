@@ -12,7 +12,20 @@
           "package_name": "com.example.bookt"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "912600100803-5vjo1piaun88f65lraev81mgtsdha9hm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bookt",
+            "certificate_hash": "8940e5631ca608b43c9181bcfb2e27e2b2eb59d8"
+          }
+        },
+        {
+          "client_id": "912600100803-b9inrk0m2uceooq6n47bhgj3h5usrg0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC717V85eQ2LJzJpjpo8mJr3_DDAW3sJio"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912600100803-b9inrk0m2uceooq6n47bhgj3h5usrg0c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "912600100803-fjek374aq3epitgnjp52qm496acbakfv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bookt"
+              }
+            }
+          ]
         }
       }
     }

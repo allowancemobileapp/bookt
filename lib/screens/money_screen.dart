@@ -66,13 +66,16 @@ class MoneyScreen extends StatelessWidget {
       appBar: AppBar(
         title: const CyberpunkText(text: 'Money'),
         actions: [
+          // CSV Export
           IconButton(
-            onPressed: () => CSVExport.exportToCSV(userId!),
-            icon: Image.asset(
-              'assets/icons/csv_export.png',
-              height: 24,
-              color: const Color(0xFF08F7FE),
-            ),
+            onPressed: () => ExportService.exportToCSV(userId!),
+            icon: const Icon(Icons.table_view, color: Color(0xFF08F7FE)),
+          ),
+          // PDF Export
+          IconButton(
+            onPressed: () => ExportService.exportToPDF(userId!),
+            icon: const Icon(Icons.picture_as_pdf,
+                color: Color(0xFFFF009D)), // Neon Pink
           ),
         ],
       ),
