@@ -30,6 +30,7 @@ dependencies:
   printing: ^5.13.5
   google_sign_in: ^6.2.2
   file_saver: 0.2.14
+  url_launcher: ^6.2.5
   flutter_web_plugins:
     sdk: flutter
 
