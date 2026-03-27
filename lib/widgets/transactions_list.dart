@@ -2,17 +2,20 @@ import 'package:bookt/screens/edit_transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-// If you have an edit transaction screen, keep this import. Otherwise remove it.
-// import 'package:bookt/screens/edit_transaction_screen.dart';
 
 class TransactionsList extends StatelessWidget {
   final String userId;
-  const TransactionsList({super.key, required this.userId});
+  final String searchQuery; // 🔥 NEW
+
+  const TransactionsList({
+    super.key,
+    required this.userId,
+    required this.searchQuery, // 🔥 NEW
+  });
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      // Use the "money" collection for reading
       stream: FirebaseFirestore.instance
           .collection('money')
           .where('userId', isEqualTo: userId)
@@ -37,12 +40,29 @@ class TransactionsList extends StatelessWidget {
 
         final transactions = snapshot.data!.docs;
 
+        // 🔥 FILTER LOGIC
+        final filteredTransactions = transactions.where((transaction) {
+          final data = transaction.data() as Map<String, dynamic>;
+
+          final reason = (data['reason'] ?? "").toString().toLowerCase();
+          final details = (data['details'] ?? "").toString().toLowerCase();
+
+          return reason.contains(searchQuery) || details.contains(searchQuery);
+        }).toList();
+
+        if (filteredTransactions.isEmpty) {
+          return const Text(
+            'No matching results',
+            style: TextStyle(color: Colors.white),
+          );
+        }
+
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: transactions.length,
+          itemCount: filteredTransactions.length,
           itemBuilder: (context, index) {
-            final transaction = transactions[index];
+            final transaction = filteredTransactions[index];
             final data = transaction.data() as Map<String, dynamic>;
 
             final amount = (data['amount'] is num)
@@ -114,7 +134,6 @@ class TransactionsList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // If you don't have an edit screen, remove this trailing icon
                   trailing: IconButton(
                     icon: const Icon(Icons.edit, color: Color(0xFF08F7FE)),
                     onPressed: () {

@@ -8,10 +8,17 @@ import '../widgets/animated_background.dart';
 import 'credit_entry_screen.dart';
 import 'debit_entry_screen.dart';
 
-class MoneyScreen extends StatelessWidget {
-  MoneyScreen({super.key});
+class MoneyScreen extends StatefulWidget {
+  const MoneyScreen({super.key});
 
+  @override
+  State<MoneyScreen> createState() => _MoneyScreenState();
+}
+
+class _MoneyScreenState extends State<MoneyScreen> {
   final String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+  String searchQuery = "";
 
   Future<void> _showEntryOptions(BuildContext context) async {
     showModalBottomSheet(
@@ -26,7 +33,7 @@ class MoneyScreen extends StatelessWidget {
                 title: const Text('Add Credit',
                     style: TextStyle(color: Colors.white)),
                 onTap: () {
-                  Navigator.pop(sheetContext); // close the bottom sheet
+                  Navigator.pop(sheetContext);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => CreditEntryScreen()),
@@ -65,17 +72,39 @@ class MoneyScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const CyberpunkText(text: 'Money'),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value.toLowerCase();
+                });
+              },
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "Search transactions...",
+                hintStyle: const TextStyle(color: Colors.white54),
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                filled: true,
+                fillColor: Colors.black.withOpacity(0.3),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
+        ),
         actions: [
-          // CSV Export
           IconButton(
             onPressed: () => ExportService.exportToCSV(userId!),
             icon: const Icon(Icons.table_view, color: Color(0xFF08F7FE)),
           ),
-          // PDF Export
           IconButton(
             onPressed: () => ExportService.exportToPDF(userId!),
-            icon: const Icon(Icons.picture_as_pdf,
-                color: Color(0xFFFF009D)), // Neon Pink
+            icon: const Icon(Icons.picture_as_pdf, color: Color(0xFFFF009D)),
           ),
         ],
       ),
@@ -89,7 +118,12 @@ class MoneyScreen extends StatelessWidget {
                 children: [
                   BalanceSummary(userId: userId!),
                   const SizedBox(height: 20),
-                  TransactionsList(userId: userId!),
+
+                  // 🔥 Pass search query to transactions list
+                  TransactionsList(
+                    userId: userId!,
+                    searchQuery: searchQuery,
+                  ),
                 ],
               ),
             ),
